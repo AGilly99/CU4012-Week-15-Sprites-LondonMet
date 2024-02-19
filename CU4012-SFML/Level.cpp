@@ -22,6 +22,7 @@ Level::Level(sf::RenderWindow* hwnd, Input* in)
 	
 	//Setting Input and Velocity 
 	playerSprite.setInput(input);
+	
 
 
 	//Loading enemy Texture 
@@ -42,6 +43,25 @@ Level::Level(sf::RenderWindow* hwnd, Input* in)
 
 	e1.setWindow(window);
 	e2.setWindow(window);
+
+	//curser implamentations
+	curserTex.loadFromFile("gfx/icon.png");
+
+	mousePointer.setTexture(&curserTex);
+	mousePointer.setSize(sf::Vector2f(50, 50));
+
+	mousePointer.setInput(input); 
+
+	window->setMouseCursorVisible(false);
+
+	//background stuff
+	backgroundTex.loadFromFile("gfx/Level1_1.png");
+	
+	bg.setTexture(&backgroundTex);
+	bg.setSize(sf::Vector2f(11038, 675));
+	bg.setInput(input);
+	bg.setWindow(window);
+
 }
 
 Level::~Level()
@@ -59,6 +79,10 @@ void Level::handleInput(float dt)
 	}
 	playerSprite.handleInput(dt);
 
+	window->getDefaultView();
+	bg.handleInput(dt);
+
+
 }
 
 // Update game objects
@@ -67,6 +91,9 @@ void Level::update(float dt)
 
 	e1.update(dt, move);
 	e2.update(dt, move1);
+
+	mousePointer.update(dt);
+
 	
 }
 
@@ -74,9 +101,12 @@ void Level::update(float dt)
 void Level::render()
 {
 	beginDraw();
-
+	//render background
+	window->draw(bg);
 	window->draw(testSprite);
 	window->draw(playerSprite);
+
+	window->draw(mousePointer);
 
 	window->draw(e1);
 	window->draw(e2);
